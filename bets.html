@@ -15,14 +15,38 @@
       align-items: center;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 20px;
+    /* Top Nav / Balance / Leaderboard */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8f9fa;
+      padding: 10px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+      width: 100%;
+      max-width: 900px;
     }
 
     .balance {
       font-size: 18px;
       font-weight: bold;
+      color: #333;
+      margin: 0;
+    }
+
+    .leaderboard-btn {
+      padding: 10px 15px;
+      background: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .leaderboard-btn:hover {
+      background: #e64a19;
     }
 
     /* Game Toggle */
@@ -31,7 +55,6 @@
       gap: 10px;
       margin-bottom: 15px;
     }
-
     .game-toggle button {
       padding: 10px 15px;
       border: none;
@@ -42,11 +65,9 @@
       cursor: pointer;
       transition: 0.3s;
     }
-
     .game-toggle button.active {
       background: #0056b3;
     }
-
     .game-toggle button:hover {
       background: #0056b3;
     }
@@ -55,7 +76,6 @@
     .bet-container {
       width: 100%;
       max-width: 500px;
-      max-height: 500px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -65,7 +85,6 @@
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
-
     .bet-card {
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -75,26 +94,22 @@
       flex-direction: column;
       gap: 10px;
     }
-
     .bet-card h3 {
       margin: 0;
     }
-
     .bet-card p {
       margin: 5px 0;
     }
-
     .bet-card label {
       font-weight: bold;
     }
-
     .bet-card input[type="number"] {
       width: 100%;
       padding: 8px;
       border: 1px solid #ddd;
       border-radius: 4px;
+      box-sizing: border-box;
     }
-
     .bet-card button {
       padding: 10px;
       background-color: #28a745;
@@ -104,36 +119,20 @@
       cursor: pointer;
       font-size: 16px;
     }
-
     .bet-card button:hover {
       background-color: #218838;
     }
-
-    /* Leaderboard Button */
-    .leaderboard-btn {
-      margin-top: 15px;
-      padding: 10px 15px;
-      background: #ff5722;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .leaderboard-btn:hover {
-      background: #e64a19;
-    }
-
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Place Your Bet</h1>
+  <!-- Top Nav Bar -->
+  <nav>
     <p class="balance">Balance: <span id="balance">$0</span></p>
-  </header>
+    <button class="leaderboard-btn" onclick="window.location.href='leaderboard.html'">
+      View Leaderboard
+    </button>
+  </nav>
 
   <!-- Game Selection -->
   <div class="game-toggle">
@@ -146,9 +145,6 @@
   <div class="bet-container" id="betContainer">
     <!-- Betting cards will be populated dynamically -->
   </div>
-
-  <!-- Leaderboard Button -->
-  <button class="leaderboard-btn" onclick="window.location.href='leaderboard.html'">View Leaderboard</button>
 
   <script type="module" src="bets.js"></script>
 

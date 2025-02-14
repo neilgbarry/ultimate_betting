@@ -41,11 +41,13 @@ async function fetchUserProfile(userId) {
         betsSnap.forEach(betDoc => {
             const bet = betDoc.data();
             console.log(bet)
+            console.log(bet.game)
             if (bet.userId === userId) {
                 betHistory.push({ 
                     amount: bet.amount, 
                     status: bet.status, 
-                    odds: bet.odds
+                    odds: bet.odds,
+                    game: bet.game
                 });
             }
         });
@@ -64,15 +66,30 @@ async function displayUserProfile() {
     
     if (userProfile) {
         profileContainer.innerHTML = `
-            <h2>${userProfile.username}'s Bet History</h2>
-            <p>Balance: $${userProfile.balance.toFixed(2)}</p>
-            <h3>Bet History</h3>
-            <ul>
+        <h2>${userProfile.username}'s Bet History</h2>
+        <p>Balance: $${userProfile.balance.toFixed(2)}</p>
+        <h3>Bet History</h3>
+        <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Game</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Odds</th>
+                </tr>
+            </thead>
+            <tbody>
                 ${userProfile.betHistory.map(bet => `
-                    <li><strong>$${bet.amount.toFixed(2)}</strong> - ${bet.status} - ${bet.odds}</li>
+                    <tr>
+                        <td>${bet.game ? bet.game : "Unknown Game"}</td>
+                        <td>$${bet.amount.toFixed(2)}</td>
+                        <td>${bet.status}</td>
+                        <td>${bet.odds}</td>
+                    </tr>
                 `).join('')}
-            </ul>
-        `;
+            </tbody>
+        </table>
+    `;  
     } else {
         profileContainer.innerHTML = "<p>User not found</p>";
     }

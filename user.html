@@ -42,7 +42,13 @@
         li:last-child {
             border-bottom: none;
         }
-        .button {
+        #leaderboard-button-box {
+            display: flex;
+            justify-content: center;  /* Horizontally center the button */
+            width: 100%;  /* Full width of the screen */
+        }
+
+        .leaderboard-button {
             background-color: #333;
             color: white;
             padding: 10px 15px;
@@ -57,18 +63,20 @@
     </style>
 </head>
 <body>
+    
     <header>
         <h1>User Profile</h1>
     </header>
-
+    
     <div id="profile">
         <p>Loading profile...</p>
-    </div>
-
-    <a href="leaderboard.html" class="button">Back to Leaderboard</a>
+    </div>    
 
     <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js"></script>
     <script type="module" src="user.js"></script>
+    <div id="leaderboard-button-box">
+        <a href="leaderboard.html" class="leaderboard-button">Back to Leaderboard</a>
+    </div>
 </body>
 </html>

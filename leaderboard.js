@@ -38,7 +38,9 @@ async function fetchUsers() {
         });
 
         const totalValue = balance + pendingBetsTotal;
+		if (username != "Admin") {
         users.push({ username, balance, pendingBetsTotal, totalValue });
+		}
     }
 
     return users;

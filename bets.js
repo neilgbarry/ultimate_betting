@@ -22,6 +22,25 @@ let userId = null;
 const lockTimeGroup1 = new Date("February 15, 2025 15:00:00"); // 3:00 PM for first two options
 const lockTimeGroup2 = new Date("February 15, 2025 17:00:00"); // 5:00 PM for last three options
 
+let selectedGameTitle = "Game 1"; // Default game title
+
+const gameTitles = {
+  game1: "Game 1",
+  game2: "Game 2",
+  game3: "Game 3",
+  game4: "Game 4"
+};
+
+window.onload = function () {
+  // Set the first button as active when the page loads
+  const firstButton = document.querySelector(".game-toggle button");
+  if (firstButton) {
+    firstButton.classList.add("active");
+  }
+
+  console.log("Default selected game:", selectedGameTitle);
+};
+
 // Update user's balance display
 async function loadUserBalance() {
   if (!userId) return;
@@ -136,6 +155,7 @@ async function placeBet(categoryName) {
   const optionId = selectedOption.value;
   const betAmountInput = document.getElementById(`betAmount_${categoryName}`);
   const betAmount = parseFloat(betAmountInput.value);
+  const currentGame = selectedGameTitle
 
   if (isNaN(betAmount) || betAmount <= 0 || betAmount > 40) {
     alert("Please enter a valid bet amount (max $40).");
@@ -169,6 +189,7 @@ async function placeBet(categoryName) {
     choice: optionId,
     odds: betCategories.find(cat => cat.options.some(opt => opt.id === optionId)).options.find(opt => opt.id === optionId).odds,
     status: "pending",
+    game: currentGame,
   });
 
   alert(`Bet placed on "${selectedOption.nextSibling.textContent.trim()}" for $${betAmount}!`);
@@ -187,14 +208,18 @@ onAuthStateChanged(auth, user => {
   }
 });
 
+
 window.placeBet = placeBet;
 
-
 window.switchGame = function(game) {
-	const buttons = document.querySelectorAll(".game-toggle button");
-	buttons.forEach(btn => btn.classList.remove("active"));
-	event.target.classList.add("active");
-
-	// Call a function to load bets based on the selected game
-	renderBetCards(game);
-  }
+    const buttons = document.querySelectorAll(".game-toggle button");
+    buttons.forEach(btn => btn.classList.remove("active"));
+    event.target.classList.add("active");
+  
+    // Store the selected game title
+    selectedGameTitle = gameTitles[game] || "Unknown Game"; 
+    console.log("Selected game:", selectedGameTitle); // Debugging
+  
+    // Call a function to load bets based on the selected game
+    renderBetCards(game);
+  };

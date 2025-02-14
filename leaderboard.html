@@ -35,11 +35,29 @@
         tr:nth-child(even) {
             background: #f9f9f9;
         }
+        /* Back Button */
+        .back-btn {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .back-btn:hover {
+            background: #e64a19;
+        }
     </style>
 </head>
 <body>
     <h1>Leaderboard</h1>
     <div id="leaderboard"></div>
+
+    <!-- Back to Betting Button -->
+    <button class="back-btn" onclick="window.location.href='bets.html'">Back to Betting</button>
 
     <script type="module" src="leaderboard.js"></script>
 </body>

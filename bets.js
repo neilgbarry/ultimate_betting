@@ -22,14 +22,15 @@ let userId = null;
 const lockTimeGroup1 = new Date("February 15, 2025 15:00:00"); // 3:00 PM for first two options
 const lockTimeGroup2 = new Date("February 15, 2025 17:00:00"); // 5:00 PM for last three options
 
-// Define 5 example betting options with odds and their respective lock times
+// Define 5 example betting options with odds, lock times, and game assignment
 const betOptions = [
-  { id: 'option1', name: 'Team A Wins', odds: 1.8, lockTime: lockTimeGroup1 },
-  { id: 'option2', name: 'Team B Wins', odds: 2.1, lockTime: lockTimeGroup1 },
-  { id: 'option3', name: 'Draw', odds: 3.0, lockTime: lockTimeGroup2 },
-  { id: 'option4', name: 'Over 2.5 Goals', odds: 1.9, lockTime: lockTimeGroup2 },
-  { id: 'option5', name: 'Under 2.5 Goals', odds: 1.7, lockTime: lockTimeGroup2 },
-];
+	{ id: 'option1', name: 'Team A Wins', odds: 1.8, lockTime: lockTimeGroup1, game: 'game1' },
+	{ id: 'option2', name: 'Team B Wins', odds: 2.1, lockTime: lockTimeGroup1, game: 'game1' },
+	{ id: 'option3', name: 'Draw', odds: 3.0, lockTime: lockTimeGroup2, game: 'game1' },
+	{ id: 'option4', name: 'Over 2.5 Goals', odds: 1.9, lockTime: lockTimeGroup2, game: 'game2' },
+	{ id: 'option5', name: 'Under 2.5 Goals', odds: 1.7, lockTime: lockTimeGroup2, game: 'game2' },
+  ];
+  
 
 // Update user's balance display
 async function loadUserBalance() {
@@ -68,15 +69,18 @@ function createBetCard(option) {
   return card;
 }
 
-// Render all betting cards
-function renderBetCards() {
-  const container = document.getElementById("betContainer");
-  container.innerHTML = "";
-  betOptions.forEach(option => {
-    const card = createBetCard(option);
-    container.appendChild(card);
-  });
-}
+// Render betting cards only for the selected game
+function renderBetCards(game) {
+	const container = document.getElementById("betContainer");
+	container.innerHTML = "";
+	betOptions
+	  .filter(option => option.game === game)
+	  .forEach(option => {
+		const card = createBetCard(option);
+		container.appendChild(card);
+	  });
+  }
+  
 
 // Place a bet for a selected option
 async function placeBet(option) {
@@ -137,9 +141,19 @@ onAuthStateChanged(auth, user => {
   if (user) {
     userId = user.uid;
     loadUserBalance();
-    renderBetCards();
+    renderBetCards("game1");
   } else {
     alert("You must be signed in.");
     window.location.href = "index.html";
   }
 });
+
+
+window.switchGame = function(game) {
+	const buttons = document.querySelectorAll(".game-toggle button");
+	buttons.forEach(btn => btn.classList.remove("active"));
+	event.target.classList.add("active");
+
+	// Call a function to load bets based on the selected game
+	renderBetCards(game);
+  }

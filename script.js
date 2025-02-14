@@ -75,6 +75,7 @@ function checkUserBalance(uid) {
 onAuthStateChanged(auth, user => {
     if (user) {
         document.getElementById("user-info").textContent = `Logged in as ${user.email}`;
+        window.location.href = "bets.html";
     } else {
         document.getElementById("user-info").textContent = "Not signed in";
     }

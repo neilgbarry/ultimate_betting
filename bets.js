@@ -19,8 +19,10 @@ const auth = getAuth(app);
 let userId = null;
 
 // Define lock times for the bets
-const lockTimeGroup1 = new Date("February 15, 2025 15:00:00"); // 3:00 PM for first two options
-const lockTimeGroup2 = new Date("February 15, 2025 17:00:00"); // 5:00 PM for last three options
+const lockTimeGroup1 = new Date("February 15, 2025 13:40:00"); // 1:40 PM Games
+const lockTimeGroup2 = new Date("February 15, 2025 15:00:00"); // 3:00 PM Games
+const lockTimeGroup3 = new Date("February 15, 2025 16:20:00"); // 4:20 PM Games
+
 
 // Update user's balance display
 async function loadUserBalance() {
@@ -34,48 +36,111 @@ async function loadUserBalance() {
 
 const betCategories = [
   {
-    category: "Winner",
+    category: "Moneyline",
     options: [
-      { id: "option1", name: "Team A Wins", odds: 1.8, lockTime: lockTimeGroup1, game: "game1" },
-      { id: "option2", name: "Team B Wins", odds: 2.1, lockTime: lockTimeGroup1, game: "game1" },
+      { id: "option1", name: "Colorado", odds: 1.25, lockTime: lockTimeGroup1, game: "game1" },
+      { id: "option2", name: "Stanford", odds: 5, lockTime: lockTimeGroup1, game: "game1" },
     ],
   },
   {
-    category: "Over/Under",
+    category: "Spread",
     options: [
-      { id: "option3", name: "Over 2.5 Goals", odds: 1.9, lockTime: lockTimeGroup1, game: "game1" },
-      { id: "option4", name: "Under 2.5 Goals", odds: 1.7, lockTime: lockTimeGroup1, game: "game1" },
+      { id: "option3", name: "Colorado -3.5", odds: 1.8, lockTime: lockTimeGroup1, game: "game1" },
+      { id: "option4", name: "Stanford +3.5", odds: 2.25, lockTime: lockTimeGroup1, game: "game1" },
     ],
   },
   {
-    category: "Hammers Over/Under",
+    category: "Moneyline",
     options: [
-      { id: "option5", name: "Over 2.5 Hammers", odds: 1.9, lockTime: lockTimeGroup1, game: "game1" },
-      { id: "option6", name: "Under 2.5 Gammers", odds: 1.7, lockTime: lockTimeGroup1, game: "game1" },
+      { id: "option7", name: "Oregon State", odds: 1.44, lockTime: lockTimeGroup1, game: "game2" },
+      { id: "option8", name: "California", odds: 3.25, lockTime: lockTimeGroup1, game: "game2" },
     ],
   },
   {
-    category: "Winner",
+    category: "Spread",
     options: [
-      { id: "option7", name: "Team A Wins", odds: 1.8, lockTime: lockTimeGroup2, game: "game2" },
-      { id: "option8", name: "Team B Wins", odds: 2.1, lockTime: lockTimeGroup2, game: "game2" },
+      { id: "option9", name: "Oregon State -1.5", odds: 2.35, lockTime: lockTimeGroup1, game: "game2" },
+      { id: "option10", name: "California +1.5", odds: 1.74, lockTime: lockTimeGroup1, game: "game2" },
     ],
   },
   {
-    category: "Over/Under",
+    category: "Hammers",
     options: [
-      { id: "option9", name: "Over 2.5 Goals", odds: 1.9, lockTime: lockTimeGroup2, game: "game2" },
-      { id: "option10", name: "Under 2.5 Goals", odds: 1.7, lockTime: lockTimeGroup2, game: "game2" },
+      { id: "option11", name: "Over 2.5", odds: 2, lockTime: lockTimeGroup1, game: "game2" },
+      { id: "option12", name: "Under 2.5", odds: 2, lockTime: lockTimeGroup1, game: "game2" },
     ],
   },
   {
-    category: "Hammers Over/Under",
+    category: "Moneyline",
     options: [
-      { id: "option11", name: "Over 2.5 Hammers", odds: 1.9, lockTime: lockTimeGroup2, game: "game2" },
-      { id: "option12", name: "Under 2.5 Gammers", odds: 1.7, lockTime: lockTimeGroup2, game: "game2" },
+      { id: "option13", name: "Western Washington", odds: 1.25, lockTime: lockTimeGroup2, game: "game3" },
+      { id: "option14", name: "UC Santa Cruz", odds: 5, lockTime: lockTimeGroup2, game: "game3" },
+    ],
+  },
+  {
+    category: "Spread",
+    options: [
+      { id: "option15", name: "Western Washington -3.5", odds: 1.8, lockTime: lockTimeGroup2, game: "game3" },
+      { id: "option16", name: "UC Santa Cruz +3.5", odds: 2.25, lockTime: lockTimeGroup2, game: "game3" },
+    ],
+  },
+  {
+    category: "Moneyline",
+    options: [
+      { id: "option17", name: "Northeastern", odds: 1.25, lockTime: lockTimeGroup2, game: "game4" },
+      { id: "option18", name: "UC San Diego", odds: 5, lockTime: lockTimeGroup2, game: "game4" },
+    ],
+  },
+  {
+    category: "Spread",
+    options: [
+      { id: "option19", name: "Northeastern -3.5", odds: 1.8, lockTime: lockTimeGroup2, game: "game4" },
+      { id: "option20", name: "UC San Diego +3.5", odds: 2.25, lockTime: lockTimeGroup2, game: "game4" },
+    ],
+  },
+  {
+    category: "Moneyline",
+    options: [
+      { id: "option1", name: "Utah", odds: 1.25, lockTime: lockTimeGroup3, game: "game5" },
+      { id: "option2", name: "UC Davis", odds: 5, lockTime: lockTimeGroup3, game: "game5" },
+    ],
+  },
+  {
+    category: "Spread",
+    options: [
+      { id: "option3", name: "Utah -3.5", odds: 1.8, lockTime: lockTimeGroup3, game: "game5" },
+      { id: "option4", name: "UC Davis +3.5", odds: 2.25, lockTime: lockTimeGroup3, game: "game5" },
+    ],
+  },
+  {
+    category: "Moneyline",
+    options: [
+      { id: "option1", name: "Oregon", odds: 1.25, lockTime: lockTimeGroup3, game: "game6" },
+      { id: "option2", name: "Northeastern", odds: 5, lockTime: lockTimeGroup3, game: "game6" },
+    ],
+  },
+  {
+    category: "Spread",
+    options: [
+      { id: "option3", name: "Oregon -3.5", odds: 1.8, lockTime: lockTimeGroup3, game: "game6" },
+      { id: "option4", name: "Northeastern +3.5", odds: 2.25, lockTime: lockTimeGroup3, game: "game6" },
     ],
   },
 ];
+
+function convertToAmericanOdds(decimalOdds) {
+  if (decimalOdds >= 2.00) {
+    return `+${Math.round((decimalOdds - 1) * 100)}`;
+  } else {
+    return `${Math.round(-100 / (decimalOdds - 1))}`;
+  }
+}
+
+function setLockTime(lockTime) {
+  console.log(lockTime);
+  const lockTimeElement = document.getElementById("lock-time");
+  lockTimeElement.textContent = new Date(lockTime).toLocaleString();
+}
 
 // Create a category card
 function createCategoryCard(category) {
@@ -85,28 +150,50 @@ function createCategoryCard(category) {
   const now = new Date();
   const isLocked = now >= category.options[0].lockTime; // Check lock status for the first option
 
+  setLockTime(category.options[0].lockTime);
+
   let optionsHTML = "";
   category.options.forEach(option => {
     optionsHTML += `
       <label>
-        <input type="radio" name="${category.category}" value="${option.id}" ${isLocked ? "disabled" : ""}>
-        ${option.name} (Odds: ${option.odds})
+        <input type="radio" name="${category.category}" value="${option.id}" data-odds="${option.odds}" ${isLocked ? "disabled" : ""}>
+        ${option.name} (${convertToAmericanOdds(option.odds)})
       </label><br>
     `;
   });
 
   card.innerHTML = `
     <h3>${category.category}</h3>
-    <p>Bet Lock Time: ${category.options[0].lockTime.toLocaleString()}</p>
     ${optionsHTML}
     <label for="betAmount_${category.category}">Bet Amount ($):</label>
     <input type="number" id="betAmount_${category.category}" placeholder="Max $40" min="1" max="40" ${isLocked ? "disabled" : ""}>
-    <button onclick="placeBet('${category.category}')" ${isLocked ? "disabled" : ""}>Place Bet</button>
+    <button id="placeBet${category.category}" onclick="placeBet('${category.category}')" ${isLocked ? "disabled" : ""}>Place Bet</button>
     ${isLocked ? `<p style="color: red; font-weight: bold;">Bet locked</p>` : ""}
   `;
 
+  // Add event listeners for input changes
+  const betAmountInput = card.querySelector(`#betAmount_${category.category}`);
+  const placeBet = card.querySelector(`#placeBet${category.category}`);
+  const radioButtons = card.querySelectorAll(`input[name="${category.category}"]`);
+
+  function updateWinnings() {
+    const selectedOption = card.querySelector(`input[name="${category.category}"]:checked`);
+    if (selectedOption && betAmountInput.value) {
+      const odds = parseFloat(selectedOption.dataset.odds);
+      const betAmount = parseFloat(betAmountInput.value);
+      const potentialWinnings = betAmount * odds;
+      placeBet.textContent = `Place Bet (Payout: $${potentialWinnings.toFixed(2)})`;
+    } else {
+      placeBet.textContent = "Place Bet";
+    }
+  }
+
+  betAmountInput.addEventListener("input", updateWinnings);
+  radioButtons.forEach(radio => radio.addEventListener("change", updateWinnings));
+
   return card;
 }
+
 
 // Render category-based bet cards
 function renderBetCards(game) {

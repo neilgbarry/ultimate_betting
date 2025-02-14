@@ -136,10 +136,16 @@
 
   <!-- Game Selection -->
   <div class="game-toggle">
-    <button class="active" onclick="switchGame('game1')">Game 1</button>
-    <button onclick="switchGame('game2')">Game 2</button>
-    <button onclick="switchGame('game3')">Game 3</button>
-    <button onclick="switchGame('game4')">Game 4</button>
+    <button class="active" onclick="switchGame('game1')">COL vs. STANF</button>
+    <button onclick="switchGame('game2')">OSU vs. CAL</button>
+    <button onclick="switchGame('game3')">WWU vs. UCSC</button>
+    <button onclick="switchGame('game4')">NEU vs. UCSD</button>
+    <button onclick="switchGame('game5')">UTAH vs. UCD</button>
+    <button onclick="switchGame('game6')">ORE vs. NEU</button>
+  </div>
+
+  <div id="bet-lock-time" style="margin-bottom: 15px; font-size: 16px; font-weight: bold; color: #d9534f;">
+    Bets lock at: <span id="lock-time">Loading...</span>
   </div>
 
   <div class="bet-container" id="betContainer">

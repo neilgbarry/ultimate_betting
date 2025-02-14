@@ -22,10 +22,11 @@ async function fetchUsers() {
     let users = [];
 
     for (const userDoc of usersSnap.docs) {
-        const userId = userDoc.id;
+        const userId = userDoc.id;  // Now using the Firestore document ID
         const userData = userDoc.data();
-		const username = userData.username;
+        const username = userData.username;
         const balance = userData.balance || 0;
+        console.log("User ID:", userId, "Username:", username);
 
         // Fetch pending bets for the user
         const betsRef = collection(db, "bets");
@@ -38,9 +39,9 @@ async function fetchUsers() {
         });
 
         const totalValue = balance + pendingBetsTotal;
-		if (username != "Admin") {
-        users.push({ username, balance, pendingBetsTotal, totalValue });
-		}
+        if (username !== "Admin") {
+            users.push({ userId, username, balance, pendingBetsTotal, totalValue });
+        }
     }
 
     return users;
@@ -53,6 +54,7 @@ async function displayLeaderboard() {
 
     const users = await fetchUsers();
     users.sort((a, b) => b.totalValue - a.totalValue);
+    
     leaderboardContainer.innerHTML = `
         <table>
             <thead>
@@ -68,7 +70,7 @@ async function displayLeaderboard() {
                 ${users.map((user, index) => `
                     <tr>
                         <td>${index + 1}</td>
-                        <td>${user.username}</td>
+                        <td><a href="user.html?userId=${encodeURIComponent(user.userId)}">${user.username}</a></td>
                         <td>${user.balance.toFixed(2)}</td>
                         <td>${user.pendingBetsTotal.toFixed(2)}</td>
                         <td><strong>${user.totalValue.toFixed(2)}</strong></td>

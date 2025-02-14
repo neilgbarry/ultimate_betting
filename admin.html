@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Settle Bets</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f0f0f0;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    .option-card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .option-card h3 {
+      margin: 0;
+    }
+    .option-card p {
+      margin: 5px 0;
+    }
+    .option-card label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    .option-card input {
+      margin-right: 5px;
+    }
+    .option-card button {
+      padding: 10px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .option-card button:hover {
+      background: #218838;
+    }
+    .status {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Settle Bets by Option</h2>
+    <div id="optionsContainer">
+      <!-- Option cards will be rendered here -->
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

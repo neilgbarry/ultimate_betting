@@ -1,7 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js';
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js';
-import { getFirestore, doc, setDoc, getDoc, collection } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js';
+import { getFirestore, doc, setDoc, getDoc, getDocs, collection, query, where } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js';
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -27,7 +27,7 @@ window.signIn = function() {
 
     signInWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
-            window.location.href = "dashboard.html";
+            window.location.href = "bets.html";
         })
         .catch(error => alert(error.message));
 };
@@ -43,10 +43,9 @@ window.signUp = function() {
         return setDoc(doc(db, "users", user.uid), {
             email: user.email,
             balance: 100  // ✅ FIXED: Using setDoc to initialize balance
-        });
-    })
-    .then(() => {
-        window.location.href = "dashboard.html"; // Redirect to dashboard
+        }).then(() => {
+            showUsernamePopup(user.uid);
+        })
     })
     .catch(error => alert(error.message));
 };
@@ -80,3 +79,35 @@ onAuthStateChanged(auth, user => {
         document.getElementById("user-info").textContent = "Not signed in";
     }
 });
+
+// Show popup for username selection
+function showUsernamePopup(userId) {
+    const popup = document.getElementById("usernamePopup");
+    popup.style.display = "block";
+
+    window.saveUsername = async function() {
+        const username = document.getElementById("usernameInput").value.trim();
+    
+        if (!username) {
+            alert("Username cannot be empty.");
+            return;
+        }
+    
+        // Check if username exists
+        const usersRef = collection(db, "users");
+        const usernameQuery = query(usersRef, where("username", "==", username));
+        const usernameSnap = await getDocs(usernameQuery);
+    
+        if (!usernameSnap.empty) {
+            alert("Name already taken. Choose another one.");
+            return;
+        }
+    
+        // Save username
+        await setDoc(doc(db, "users", userId), { username }, { merge: true });
+    
+        popup.style.display = "none";
+        window.location.href = "bets.html";
+    }
+}
+

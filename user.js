@@ -1,5 +1,6 @@
 import { getFirestore, collection, getDocs, doc, getDoc, query, where } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js';
 
 const firebaseConfig = {
     apiKey: "AIzaSyAmPEw18Uo3Q4lWzEdn5z4w8K7hAfjB3rY",
@@ -13,7 +14,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
+let authuserId = null;
+const now = new Date();
 
 // Get the userId from the URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -40,14 +44,25 @@ async function fetchUserProfile(userId) {
         let betHistory = [];
         betsSnap.forEach(betDoc => {
             const bet = betDoc.data();
-            console.log(bet)
-            console.log(bet.game)
-            if (bet.userId === userId) {
+
+            const gameLockTime = {
+                "COL vs. STANF": new Date("February 15, 2025 13:40:00"),
+                "OSU vs. CAL": new Date("February 15, 2025 13:40:00"),
+                "WWU vs. UCSC": new Date("February 15, 2025 15:00:00"),
+                "NEU vs. UCSD": new Date("February 15, 2025 15:00:00"),
+                "UTAH vs. UCD": new Date("February 15, 2025 16:20:00"),
+                "ORE vs. NEU": new Date("February 15, 2025 16:20:00"),
+            }[bet.game]
+            const isLocked = gameLockTime && now >= gameLockTime;
+        
+            // If viewing another user's page, only show locked bets
+            if (bet.userId === userId && (userId === authuserId || isLocked)) {
                 betHistory.push({ 
                     amount: bet.amount, 
                     status: bet.status, 
-                    odds: bet.odds,
-                    game: bet.game
+                    payout: bet.amount * bet.odds,
+                    game: bet.game,
+                    betname: bet.description
                 });
             }
         });
@@ -63,7 +78,6 @@ async function displayUserProfile() {
     profileContainer.innerHTML = "<p>Loading profile...</p>";
 
     const userProfile = await fetchUserProfile(userId);
-    
     if (userProfile) {
         profileContainer.innerHTML = `
         <h2>${userProfile.username}'s Bet History</h2>
@@ -73,18 +87,20 @@ async function displayUserProfile() {
             <thead>
                 <tr>
                     <th>Game</th>
+                    <th>Bet</th>
                     <th>Amount</th>
+                    <th>Payout</th>
                     <th>Status</th>
-                    <th>Odds</th>
                 </tr>
             </thead>
             <tbody>
                 ${userProfile.betHistory.map(bet => `
                     <tr>
                         <td>${bet.game ? bet.game : "Unknown Game"}</td>
+                        <td>${bet.betname}</td>
                         <td>$${bet.amount.toFixed(2)}</td>
+                        <td>$${bet.payout.toFixed(2)}</td>
                         <td>${bet.status}</td>
-                        <td>${bet.odds}</td>
                     </tr>
                 `).join('')}
             </tbody>
@@ -96,3 +112,12 @@ async function displayUserProfile() {
 }
 
 document.addEventListener("DOMContentLoaded", displayUserProfile);
+
+// Listen for authentication changes
+onAuthStateChanged(auth, user => {
+  if (user) {
+    authuserId = user.uid;
+  } else {
+    authuserId = null;
+  }
+});

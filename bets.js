@@ -24,13 +24,15 @@ const lockTimeGroup2 = new Date("February 15, 2025 15:00:00"); // 3:00 PM Games
 const lockTimeGroup3 = new Date("February 15, 2025 16:20:00"); // 4:20 PM Games
 
 
-let selectedGameTitle = "Game 1"; // Default game title
+let selectedGameTitle = "COL vs. STANF"; // Default game title
 
 const gameTitles = {
-  game1: "Game 1",
-  game2: "Game 2",
-  game3: "Game 3",
-  game4: "Game 4"
+  game1: "COL vs. STANF",
+  game2: "OSU vs. CAL",
+  game3: "WWU vs. UCSC",
+  game4: "NEU vs. UCSD",
+  game5: "UTAH vs. UCD",
+  game6: "ORE vs. NEU"
 };
 
 window.onload = function () {
@@ -49,7 +51,7 @@ async function loadUserBalance() {
   const userRef = doc(db, "users", userId);
   const userSnap = await getDoc(userRef);
   if (userSnap.exists()) {
-    document.getElementById("balance").textContent = `$${userSnap.data().balance}`;
+    document.getElementById("balance").textContent = `$${userSnap.data().balance.toFixed(2)}`;
   }
 }
 
@@ -57,92 +59,92 @@ const betCategories = [
   {
     category: "Moneyline",
     options: [
-      { id: "option1", name: "Colorado", odds: 1.25, lockTime: lockTimeGroup1, game: "game1" },
-      { id: "option2", name: "Stanford", odds: 5, lockTime: lockTimeGroup1, game: "game1" },
+      { name: "Colorado", description: "Colorado ML", odds: 1.25, lockTime: lockTimeGroup1, game: "game1" },
+      { name: "Stanford", description: "Stanford ML", odds: 5, lockTime: lockTimeGroup1, game: "game1" },
     ],
   },
   {
     category: "Spread",
     options: [
-      { id: "option3", name: "Colorado -3.5", odds: 1.8, lockTime: lockTimeGroup1, game: "game1" },
-      { id: "option4", name: "Stanford +3.5", odds: 2.25, lockTime: lockTimeGroup1, game: "game1" },
+      { name: "Colorado -3.5", description: "Colorado -3.5", odds: 1.8, lockTime: lockTimeGroup1, game: "game1" },
+      { name: "Stanford +3.5", description: "Stanford +3.5", odds: 2.25, lockTime: lockTimeGroup1, game: "game1" },
     ],
   },
   {
     category: "Moneyline",
     options: [
-      { id: "option7", name: "Oregon State", odds: 1.44, lockTime: lockTimeGroup1, game: "game2" },
-      { id: "option8", name: "California", odds: 3.25, lockTime: lockTimeGroup1, game: "game2" },
+      { name: "Oregon State", description: "Oregon State ML", odds: 1.44, lockTime: lockTimeGroup1, game: "game2" },
+      { name: "California", description: "California ML", odds: 3.25, lockTime: lockTimeGroup1, game: "game2" },
     ],
   },
   {
     category: "Spread",
     options: [
-      { id: "option9", name: "Oregon State -1.5", odds: 2.35, lockTime: lockTimeGroup1, game: "game2" },
-      { id: "option10", name: "California +1.5", odds: 1.74, lockTime: lockTimeGroup1, game: "game2" },
+      { name: "Oregon State -1.5", description: "Oregon State -1.5", odds: 2.35, lockTime: lockTimeGroup1, game: "game2" },
+      { name: "California +1.5", description: "California +1.5", odds: 1.74, lockTime: lockTimeGroup1, game: "game2" },
     ],
   },
   {
     category: "Hammers",
     options: [
-      { id: "option11", name: "Over 2.5", odds: 2, lockTime: lockTimeGroup1, game: "game2" },
-      { id: "option12", name: "Under 2.5", odds: 2, lockTime: lockTimeGroup1, game: "game2" },
+      { name: "Over 2.5", description: "Over 2.5 Hammers", odds: 2, lockTime: lockTimeGroup1, game: "game2" },
+      { name: "Under 2.5", description: "Under 2.5 Hammers", odds: 2, lockTime: lockTimeGroup1, game: "game2" },
     ],
   },
   {
     category: "Moneyline",
     options: [
-      { id: "option13", name: "Western Washington", odds: 1.25, lockTime: lockTimeGroup2, game: "game3" },
-      { id: "option14", name: "UC Santa Cruz", odds: 5, lockTime: lockTimeGroup2, game: "game3" },
+      { name: "Western Washington", description: "Western Washington ML", odds: 1.25, lockTime: lockTimeGroup2, game: "game3" },
+      { name: "UC Santa Cruz", description: "UC Santa Cruz ML", odds: 5, lockTime: lockTimeGroup2, game: "game3" },
     ],
   },
   {
     category: "Spread",
     options: [
-      { id: "option15", name: "Western Washington -3.5", odds: 1.8, lockTime: lockTimeGroup2, game: "game3" },
-      { id: "option16", name: "UC Santa Cruz +3.5", odds: 2.25, lockTime: lockTimeGroup2, game: "game3" },
+      { name: "Western Washington -3.5", description: "Western Washington -3.5", odds: 1.8, lockTime: lockTimeGroup2, game: "game3" },
+      { name: "UC Santa Cruz +3.5", description: "UC Santa Cruz +3.5", odds: 2.25, lockTime: lockTimeGroup2, game: "game3" },
     ],
   },
   {
     category: "Moneyline",
     options: [
-      { id: "option17", name: "Northeastern", odds: 1.25, lockTime: lockTimeGroup2, game: "game4" },
-      { id: "option18", name: "UC San Diego", odds: 5, lockTime: lockTimeGroup2, game: "game4" },
+      { name: "Northeastern", description: "Northeastern ML", odds: 1.25, lockTime: lockTimeGroup2, game: "game4" },
+      { name: "UC San Diego", description: "UC San Diego ML", odds: 5, lockTime: lockTimeGroup2, game: "game4" },
     ],
   },
   {
     category: "Spread",
     options: [
-      { id: "option19", name: "Northeastern -3.5", odds: 1.8, lockTime: lockTimeGroup2, game: "game4" },
-      { id: "option20", name: "UC San Diego +3.5", odds: 2.25, lockTime: lockTimeGroup2, game: "game4" },
+      { name: "Northeastern -3.5", description: "Northeastern -3.5", odds: 1.8, lockTime: lockTimeGroup2, game: "game4" },
+      { name: "UC San Diego +3.5", description: "UC San Diego +3.5", odds: 2.25, lockTime: lockTimeGroup2, game: "game4" },
     ],
   },
   {
     category: "Moneyline",
     options: [
-      { id: "option1", name: "Utah", odds: 1.25, lockTime: lockTimeGroup3, game: "game5" },
-      { id: "option2", name: "UC Davis", odds: 5, lockTime: lockTimeGroup3, game: "game5" },
+      { name: "Utah", description: "Utah ML", odds: 1.25, lockTime: lockTimeGroup3, game: "game5" },
+      { name: "UC Davis", description: "UC Davis ML", odds: 5, lockTime: lockTimeGroup3, game: "game5" },
     ],
   },
   {
     category: "Spread",
     options: [
-      { id: "option3", name: "Utah -3.5", odds: 1.8, lockTime: lockTimeGroup3, game: "game5" },
-      { id: "option4", name: "UC Davis +3.5", odds: 2.25, lockTime: lockTimeGroup3, game: "game5" },
+      { name: "Utah -3.5", description: "Utah -3.5", odds: 1.8, lockTime: lockTimeGroup3, game: "game5" },
+      { name: "UC Davis +3.5", description: "UC Davis +3.5", odds: 2.25, lockTime: lockTimeGroup3, game: "game5" },
     ],
   },
   {
     category: "Moneyline",
     options: [
-      { id: "option1", name: "Oregon", odds: 1.25, lockTime: lockTimeGroup3, game: "game6" },
-      { id: "option2", name: "Northeastern", odds: 5, lockTime: lockTimeGroup3, game: "game6" },
+      { name: "Oregon", description: "Oregon ML", odds: 1.25, lockTime: lockTimeGroup3, game: "game6" },
+      { name: "Northeastern", description: "Northeastern ML", odds: 5, lockTime: lockTimeGroup3, game: "game6" },
     ],
   },
   {
     category: "Spread",
     options: [
-      { id: "option3", name: "Oregon -3.5", odds: 1.8, lockTime: lockTimeGroup3, game: "game6" },
-      { id: "option4", name: "Northeastern +3.5", odds: 2.25, lockTime: lockTimeGroup3, game: "game6" },
+      { id: "option3", name: "Oregon -3.5", description: "Oregon -3.5", odds: 1.8, lockTime: lockTimeGroup3, game: "game6" },
+      { id: "option4", name: "Northeastern +3.5", description: "Northeastern +3.5", odds: 2.25, lockTime: lockTimeGroup3, game: "game6" },
     ],
   },
 ];
@@ -175,7 +177,7 @@ function createCategoryCard(category) {
   category.options.forEach(option => {
     optionsHTML += `
       <label>
-        <input type="radio" name="${category.category}" value="${option.id}" data-odds="${option.odds}" ${isLocked ? "disabled" : ""}>
+        <input type="radio" name="${category.category}" value="${category.category}" data-description="${option.description}" data-odds="${option.odds}" ${isLocked ? "disabled" : ""}>
         ${option.name} (${convertToAmericanOdds(option.odds)})
       </label>
     `;
@@ -257,7 +259,7 @@ async function placeBet(categoryName) {
   }
 
   // Prevent duplicate bets on the same option
-  const betDocId = `${userId}_${optionId}`;
+  const betDocId = `${userId}_${currentGame}_${optionId}`;
   const betDocRef = doc(collection(db, "bets"), betDocId);
   const existingBetSnap = await getDoc(betDocRef);
   if (existingBetSnap.exists()) {
@@ -268,12 +270,13 @@ async function placeBet(categoryName) {
   // Deduct the bet amount from the user's balance
   await updateDoc(userRef, { balance: userSnap.data().balance - betAmount });
 
+  console.log(selectedOption);
   // Record the bet in Firestore
   await setDoc(betDocRef, {
     userId: userId,
     amount: betAmount,
-    choice: optionId,
-    odds: betCategories.find(cat => cat.options.some(opt => opt.id === optionId)).options.find(opt => opt.id === optionId).odds,
+    description: selectedOption.dataset.description,
+    odds: parseFloat(selectedOption.dataset.odds),
     status: "pending",
     game: currentGame,
   });

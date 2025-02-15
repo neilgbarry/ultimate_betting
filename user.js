@@ -46,12 +46,12 @@ async function fetchUserProfile(userId) {
             const bet = betDoc.data();
 
             const gameLockTime = {
-                "COL vs. STANF": new Date("February 15, 2025 13:40:00"),
-                "OSU vs. CAL": new Date("February 15, 2025 13:40:00"),
-                "WWU vs. UCSC": new Date("February 15, 2025 15:00:00"),
-                "NEU vs. UCSD": new Date("February 15, 2025 15:00:00"),
-                "UTAH vs. UCD": new Date("February 15, 2025 16:20:00"),
-                "ORE vs. NEU": new Date("February 15, 2025 16:20:00"),
+                "COL vs. STANF (W)": new Date("February 15, 2025 13:40:00"),
+                "OSU vs. CAL (M)": new Date("February 15, 2025 13:40:00"),
+                "WWU vs. UCSC (W)": new Date("February 15, 2025 15:00:00"),
+                "NEU vs. UCSD (M)": new Date("February 15, 2025 15:00:00"),
+                "UTAH vs. UCD (W)": new Date("February 15, 2025 16:20:00"),
+                "ORE vs. NEU (M)": new Date("February 15, 2025 16:20:00"),
             }[bet.game]
             const isLocked = gameLockTime && now >= gameLockTime;
         

@@ -24,16 +24,17 @@ const lockTimeGroup2 = new Date("February 15, 2025 15:00:00"); // 3:00 PM Games
 const lockTimeGroup3 = new Date("February 15, 2025 16:20:00"); // 4:20 PM Games
 
 
-let selectedGameTitle = "COL vs. STANF"; // Default game title
 
 const gameTitles = {
-  game1: "COL vs. STANF",
-  game2: "OSU vs. CAL",
-  game3: "WWU vs. UCSC",
-  game4: "NEU vs. UCSD",
-  game5: "UTAH vs. UCD",
-  game6: "ORE vs. NEU"
+  game1: "COL vs. STANF (W)",
+  game2: "OSU vs. CAL (M)",
+  game3: "WWU vs. UCSC (W)",
+  game4: "NEU vs. UCSD (M)",
+  game5: "UTAH vs. UCD (W)",
+  game6: "ORE vs. NEU (M)"
 };
+
+let selectedGameTitle = gameTitles["game1"]; // Default game title
 
 window.onload = function () {
   // Set the first button as active when the page loads
@@ -42,7 +43,6 @@ window.onload = function () {
     firstButton.classList.add("active");
   }
 
-  console.log("Default selected game:", selectedGameTitle);
 };
 
 // Update user's balance display

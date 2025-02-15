@@ -14,7 +14,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-document.getElementById("moneyFilter").addEventListener("change", displayLeaderboard);
 let preloadedusers = [];
 
 async function fetchUsers() {
@@ -89,4 +88,9 @@ async function displayLeaderboard() {
     displayLeaderboard(); // Load leaderboard after users are fetched
 })();
 
-document.addEventListener("DOMContentLoaded", displayLeaderboard);
+document.addEventListener("DOMContentLoaded", () => {
+    const filterCheckbox = document.getElementById("moneyFilter");
+    if (filterCheckbox) {
+        filterCheckbox.addEventListener("change", displayLeaderboard);
+    }
+});

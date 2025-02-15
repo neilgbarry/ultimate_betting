@@ -17,6 +17,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 let userId = null;
+let userAdmin = false;
 
 // Define lock times for the bets
 const lockTimeGroup1 = new Date("February 15, 2025 13:40:00"); // 1:40 PM Games
@@ -73,8 +74,8 @@ const betCategories = [
   {
     category: "Moneyline",
     options: [
-      { name: "Oregon State", description: "Oregon State ML", odds: 1.44, lockTime: lockTimeGroup1, game: "game2" },
-      { name: "California", description: "California ML", odds: 3.25, lockTime: lockTimeGroup1, game: "game2" },
+      { name: "Oregon State", description: "Oregon State ML", odds: 1.47, lockTime: lockTimeGroup1, game: "game2" },
+      { name: "California", description: "California ML", odds: 3.2, lockTime: lockTimeGroup1, game: "game2" },
     ],
   },
   {
@@ -85,6 +86,13 @@ const betCategories = [
     ],
   },
   {
+    category: "Alternate Lines",
+    options: [
+      { name: "Oregon State -4.5", description: "Oregon State -4.5", odds: 4.5, lockTime: lockTimeGroup1, game: "game2" },
+      { name: "California -2.5", description: "California -2.5", odds: 4.5, lockTime: lockTimeGroup1, game: "game2" },
+    ],
+  },
+  {
     category: "Hammers",
     options: [
       { name: "Over 2.5", description: "Over 2.5 Hammers", odds: 2, lockTime: lockTimeGroup1, game: "game2" },
@@ -92,31 +100,45 @@ const betCategories = [
     ],
   },
   {
-    category: "Moneyline",
+    category: "Breaks (Both Teams)",
     options: [
-      { name: "Western Washington", description: "Western Washington ML", odds: 1.25, lockTime: lockTimeGroup2, game: "game3" },
-      { name: "UC Santa Cruz", description: "UC Santa Cruz ML", odds: 5, lockTime: lockTimeGroup2, game: "game3" },
-    ],
-  },
-  {
-    category: "Spread",
-    options: [
-      { name: "Western Washington -3.5", description: "Western Washington -3.5", odds: 1.8, lockTime: lockTimeGroup2, game: "game3" },
-      { name: "UC Santa Cruz +3.5", description: "UC Santa Cruz +3.5", odds: 2.25, lockTime: lockTimeGroup2, game: "game3" },
+      { name: "Over 4.5", description: "Over 4.5 Breaks", odds: 2.3, lockTime: lockTimeGroup1, game: "game2" },
+      { name: "Under 4.5", description: "Under 4.5 Breaks", odds: 1.77, lockTime: lockTimeGroup1, game: "game2" },
     ],
   },
   {
     category: "Moneyline",
     options: [
-      { name: "Northeastern", description: "Northeastern ML", odds: 1.25, lockTime: lockTimeGroup2, game: "game4" },
-      { name: "UC San Diego", description: "UC San Diego ML", odds: 5, lockTime: lockTimeGroup2, game: "game4" },
+      { name: "Western Washington", description: "Western Washington ML", odds: 2.5, lockTime: lockTimeGroup2, game: "game3" },
+      { name: "UC Santa Cruz", description: "UC Santa Cruz ML", odds: 1.67, lockTime: lockTimeGroup2, game: "game3" },
     ],
   },
   {
     category: "Spread",
     options: [
-      { name: "Northeastern -3.5", description: "Northeastern -3.5", odds: 1.8, lockTime: lockTimeGroup2, game: "game4" },
-      { name: "UC San Diego +3.5", description: "UC San Diego +3.5", odds: 2.25, lockTime: lockTimeGroup2, game: "game4" },
+      { name: "Western Washington +1.5", description: "Western Washington +1.5", odds: 1.74, lockTime: lockTimeGroup2, game: "game3" },
+      { name: "UC Santa Cruz -1.5", description: "UC Santa Cruz -1.5", odds: 2.35, lockTime: lockTimeGroup2, game: "game3" },
+    ],
+  },
+  {
+    category: "Moneyline",
+    options: [
+      { name: "Northeastern", description: "Northeastern ML", odds: 1.57, lockTime: lockTimeGroup2, game: "game4" },
+      { name: "UC San Diego", description: "UC San Diego ML", odds: 2.75, lockTime: lockTimeGroup2, game: "game4" },
+    ],
+  },
+  {
+    category: "Spread",
+    options: [
+      { name: "Northeastern -1.5", description: "Northeastern -1.5", odds: 2.1, lockTime: lockTimeGroup2, game: "game4" },
+      { name: "UC San Diego +1.5", description: "UC San Diego +1.5", odds: 1.91, lockTime: lockTimeGroup2, game: "game4" },
+    ],
+  },
+  {
+    category: "OB Pulls (Both Teams)",
+    options: [
+      { name: "Over 5.5", description: "Over 5.5 OB Pulls", odds: 2.3, lockTime: lockTimeGroup2, game: "game4" },
+      { name: "Under 5.5", description: "Under 5.5 OB Pulls", odds: 1.77, lockTime: lockTimeGroup2, game: "game4" },
     ],
   },
   {
@@ -292,6 +314,24 @@ onAuthStateChanged(auth, user => {
     userId = user.uid;
     loadUserBalance();
     renderBetCards("game1");
+    console.log(user.uid);
+    if (user.uid === "wOCrlBfyH9dcdNgcDOwLsODBmMQ2") {
+      const upcomingGames = {
+        "game1": new Date("February 15, 2025 13:40:00"),
+        "game2": new Date("February 15, 2025 13:40:00"),
+        "game3": new Date("February 15, 2025 15:00:00"),
+        "game4": new Date("February 15, 2025 15:00:00"),
+        "game5": new Date("February 15, 2025 16:20:00"),
+        "game6": new Date("February 15, 2025 16:20:00"),
+      };
+      console.log(upcomingGames);
+      const gameToggleDiv = document.querySelector(".game-toggle");
+      gameToggleDiv.innerHTML = Object.entries(upcomingGames)
+        .map(([game, _], index) => 
+          `<button class="${index === 0 ? 'active' : ''}" onclick="switchGame('${game}')">${gameTitles[game]}</button>`
+        )
+        .join("");
+    }
   } else {
     alert("You must be signed in.");
     window.location.href = "index.html";
@@ -332,7 +372,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const now = new Date();
 
   // Filter games that have a lock time in the future
-  const upcomingGames = Object.entries(gameLockTimes)
+  let upcomingGames = Object.entries(gameLockTimes)
     .filter(([_, lockTime]) => new Date(lockTime) > now)
     .slice(0, 2); // Only take the first 2 games
 

@@ -103,7 +103,7 @@ const app = initializeApp(firebaseConfig);
   onAuthStateChanged(auth, user => {
 	if (user) {
 	  // Replace with your actual admin email
-	  if (user.email !== "test@test.test") {
+	  if (user.email !== "admin@a.com") {
 		alert("Access denied. You must be an admin.");
 		window.location.href = "index.html";
 	  } else {

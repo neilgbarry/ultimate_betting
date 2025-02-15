@@ -42,6 +42,7 @@ window.signUp = function() {
         const user = userCredential.user;
         return setDoc(doc(db, "users", user.uid), {
             email: user.email,
+            money: false,
             balance: 100  // ✅ FIXED: Using setDoc to initialize balance
         }).then(() => {
             showUsernamePopup(user.uid);

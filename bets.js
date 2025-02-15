@@ -177,15 +177,14 @@ function createCategoryCard(category) {
       <label>
         <input type="radio" name="${category.category}" value="${option.id}" data-odds="${option.odds}" ${isLocked ? "disabled" : ""}>
         ${option.name} (${convertToAmericanOdds(option.odds)})
-      </label><br>
+      </label>
     `;
   });
 
   card.innerHTML = `
     <h3>${category.category}</h3>
     ${optionsHTML}
-    <label for="betAmount_${category.category}">Bet Amount ($):</label>
-    <input type="number" id="betAmount_${category.category}" placeholder="Max $40" min="1" max="40" ${isLocked ? "disabled" : ""}>
+    <input type="number" id="betAmount_${category.category}" placeholder="Bet Amount" min="1" max="40" ${isLocked ? "disabled" : ""}>
     <button id="placeBet${category.category}" onclick="placeBet('${category.category}')" ${isLocked ? "disabled" : ""}>Place Bet</button>
     ${isLocked ? `<p style="color: red; font-weight: bold;">Bet locked</p>` : ""}
   `;
@@ -310,3 +309,7 @@ window.switchGame = function(game) {
     // Call a function to load bets based on the selected game
     renderBetCards(game);
   };
+
+window.userPage = function() {
+  window.location.href=`user.html?userId=${encodeURIComponent(userId)}`;
+}

@@ -14,19 +14,20 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+document.getElementById("moneyFilter").addEventListener("change", displayLeaderboard);
+let preloadedusers = [];
 
-// Fetch all users and their balances
 async function fetchUsers() {
     const usersRef = collection(db, "users");
     const usersSnap = await getDocs(usersRef);
     let users = [];
 
     for (const userDoc of usersSnap.docs) {
-        const userId = userDoc.id;  // Now using the Firestore document ID
+        const userId = userDoc.id;
         const userData = userDoc.data();
         const username = userData.username;
         const balance = userData.balance || 0;
-        console.log("User ID:", userId, "Username:", username);
+        const hasMoney = userData.money === true; // Check if money attribute is true
 
         // Fetch pending bets for the user
         const betsRef = collection(db, "bets");
@@ -40,20 +41,22 @@ async function fetchUsers() {
 
         const totalValue = balance + pendingBetsTotal;
         if (username !== "Admin") {
-            users.push({ userId, username, balance, pendingBetsTotal, totalValue });
+            users.push({ userId, username, balance, pendingBetsTotal, totalValue, hasMoney });
         }
     }
 
     return users;
 }
 
-// Display leaderboard
+// Display leaderboard with filter option
 async function displayLeaderboard() {
     const leaderboardContainer = document.getElementById("leaderboard");
     leaderboardContainer.innerHTML = "<p>Loading...</p>";
 
-    const users = await fetchUsers();
-    users.sort((a, b) => b.totalValue - a.totalValue);
+    const filterMoney = document.getElementById("moneyFilter").checked;
+    console.log(preloadedusers)
+    const filteredUsers = filterMoney ? preloadedusers.filter(user => user.hasMoney) : preloadedusers;
+    filteredUsers.sort((a, b) => b.totalValue - a.totalValue);
     
     leaderboardContainer.innerHTML = `
         <table>
@@ -67,7 +70,7 @@ async function displayLeaderboard() {
                 </tr>
             </thead>
             <tbody>
-                ${users.map((user, index) => `
+                ${filteredUsers.map((user, index) => `
                     <tr>
                         <td>${index + 1}</td>
                         <td><a href="user.html?userId=${encodeURIComponent(user.userId)}">${user.username}</a></td>
@@ -80,5 +83,10 @@ async function displayLeaderboard() {
         </table>
     `;
 }
+
+(async () => {
+    preloadedusers = await fetchUsers();
+    displayLeaderboard(); // Load leaderboard after users are fetched
+})();
 
 document.addEventListener("DOMContentLoaded", displayLeaderboard);

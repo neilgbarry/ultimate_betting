@@ -316,3 +316,34 @@ window.switchGame = function(game) {
 window.userPage = function() {
   window.location.href=`user.html?userId=${encodeURIComponent(userId)}`;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const gameLockTimes = {
+    "COL vs. STANF": new Date("February 15, 2025 13:40:00"),
+    "OSU vs. CAL": new Date("February 15, 2025 13:40:00"),
+    "WWU vs. UCSC": new Date("February 15, 2025 15:00:00"),
+    "NEU vs. UCSD": new Date("February 15, 2025 15:00:00"),
+    "UTAH vs. UCD": new Date("February 15, 2025 16:20:00"),
+    "ORE vs. NEU": new Date("February 15, 2025 16:20:00"),
+  };
+
+  const now = new Date();
+
+  // Filter games that have a lock time in the future
+  const upcomingGames = Object.entries(gameLockTimes)
+    .filter(([_, lockTime]) => new Date(lockTime) > now)
+    .slice(0, 2); // Only take the first 2 games
+
+  // Generate the filtered game buttons
+  const gameToggleDiv = document.querySelector(".game-toggle");
+  gameToggleDiv.innerHTML = upcomingGames
+    .map(([game, _], index) => 
+      `<button class="${index === 0 ? 'active' : ''}" onclick="switchGame('${game}')">${game.toUpperCase()}</button>`
+    )
+    .join("");
+
+  // Set default game to the first available
+  if (upcomingGames.length > 0) {
+    switchGame(upcomingGames[0][0]);
+  }
+});

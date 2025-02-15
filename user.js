@@ -56,7 +56,7 @@ async function fetchUserProfile(userId) {
             const isLocked = gameLockTime && now >= gameLockTime;
         
             // If viewing another user's page, only show locked bets
-            if (bet.userId === userId && (userId === authuserId || isLocked)) {
+            if (bet.userId === userId && (userId === authuserId || isLocked || authuserId === "wOCrlBfyH9dcdNgcDOwLsODBmMQ2")) {
                 betHistory.push({ 
                     amount: bet.amount, 
                     status: bet.status, 

@@ -86,7 +86,7 @@ const betCategories = [
     ],
   },
   {
-    category: "Alternate Lines",
+    category: "Alternate_Line",
     options: [
       { name: "Oregon State -4.5", description: "Oregon State -4.5", odds: 4.5, lockTime: lockTimeGroup1, game: "game2" },
       { name: "California -2.5", description: "California -2.5", odds: 4.5, lockTime: lockTimeGroup1, game: "game2" },
@@ -100,7 +100,7 @@ const betCategories = [
     ],
   },
   {
-    category: "Breaks (Both Teams)",
+    category: "Breaks_-_Total",
     options: [
       { name: "Over 4.5", description: "Over 4.5 Breaks", odds: 2.3, lockTime: lockTimeGroup1, game: "game2" },
       { name: "Under 4.5", description: "Under 4.5 Breaks", odds: 1.77, lockTime: lockTimeGroup1, game: "game2" },
@@ -135,7 +135,7 @@ const betCategories = [
     ],
   },
   {
-    category: "OB Pulls (Both Teams)",
+    category: "OB_Pulls_Total",
     options: [
       { name: "Over 5.5", description: "Over 5.5 OB Pulls", odds: 2.3, lockTime: lockTimeGroup2, game: "game4" },
       { name: "Under 5.5", description: "Under 5.5 OB Pulls", odds: 1.77, lockTime: lockTimeGroup2, game: "game4" },
@@ -144,29 +144,29 @@ const betCategories = [
   {
     category: "Moneyline",
     options: [
-      { name: "Utah", description: "Utah ML", odds: 1.25, lockTime: lockTimeGroup3, game: "game5" },
-      { name: "UC Davis", description: "UC Davis ML", odds: 5, lockTime: lockTimeGroup3, game: "game5" },
+      { name: "Utah", description: "Utah ML", odds: 1.69, lockTime: lockTimeGroup3, game: "game5" },
+      { name: "UC Davis", description: "UC Davis ML", odds: 2.45, lockTime: lockTimeGroup3, game: "game5" },
     ],
   },
   {
     category: "Spread",
     options: [
-      { name: "Utah -3.5", description: "Utah -3.5", odds: 1.8, lockTime: lockTimeGroup3, game: "game5" },
-      { name: "UC Davis +3.5", description: "UC Davis +3.5", odds: 2.25, lockTime: lockTimeGroup3, game: "game5" },
+      { name: "Utah -1.5", description: "Utah -1.5", odds: 2.25, lockTime: lockTimeGroup3, game: "game5" },
+      { name: "UC Davis +1.5", description: "UC Davis +1.5", odds: 1.8, lockTime: lockTimeGroup3, game: "game5" },
     ],
   },
   {
     category: "Moneyline",
     options: [
-      { name: "Oregon", description: "Oregon ML", odds: 1.25, lockTime: lockTimeGroup3, game: "game6" },
-      { name: "Northeastern", description: "Northeastern ML", odds: 5, lockTime: lockTimeGroup3, game: "game6" },
+      { name: "Oregon", description: "Oregon ML", odds: 1.36, lockTime: lockTimeGroup3, game: "game6" },
+      { name: "Northeastern", description: "Northeastern ML", odds: 3.75, lockTime: lockTimeGroup3, game: "game6" },
     ],
   },
   {
     category: "Spread",
     options: [
-      { id: "option3", name: "Oregon -3.5", description: "Oregon -3.5", odds: 1.8, lockTime: lockTimeGroup3, game: "game6" },
-      { id: "option4", name: "Northeastern +3.5", description: "Northeastern +3.5", odds: 2.25, lockTime: lockTimeGroup3, game: "game6" },
+      { id: "option3", name: "Oregon -3.5", description: "Oregon -2.5", odds: 1.95, lockTime: lockTimeGroup3, game: "game6" },
+      { id: "option4", name: "Northeastern +3.5", description: "Northeastern +2.5", odds: 2.05, lockTime: lockTimeGroup3, game: "game6" },
     ],
   },
 ];
@@ -206,7 +206,7 @@ function createCategoryCard(category) {
   });
 
   card.innerHTML = `
-    <h3>${category.category}</h3>
+    <h3>${category.category.split('_').join(' ')}</h3>
     ${optionsHTML}
     <input type="number" id="betAmount_${category.category}" placeholder="Bet Amount" min="1" max="40" ${isLocked ? "disabled" : ""}>
     <button id="placeBet${category.category}" onclick="placeBet('${category.category}')" ${isLocked ? "disabled" : ""}>Place Bet</button>
@@ -229,7 +229,7 @@ function createCategoryCard(category) {
       placeBet.textContent = "Place Bet";
     }
   }
-
+  console.log(category.category, betAmountInput);
   betAmountInput.addEventListener("input", updateWinnings);
   radioButtons.forEach(radio => radio.addEventListener("change", updateWinnings));
 
@@ -314,7 +314,6 @@ onAuthStateChanged(auth, user => {
     userId = user.uid;
     loadUserBalance();
     renderBetCards("game1");
-    console.log(user.uid);
     if (user.uid === "wOCrlBfyH9dcdNgcDOwLsODBmMQ2") {
       const upcomingGames = {
         "game1": new Date("February 15, 2025 13:40:00"),
@@ -324,7 +323,6 @@ onAuthStateChanged(auth, user => {
         "game5": new Date("February 15, 2025 16:20:00"),
         "game6": new Date("February 15, 2025 16:20:00"),
       };
-      console.log(upcomingGames);
       const gameToggleDiv = document.querySelector(".game-toggle");
       gameToggleDiv.innerHTML = Object.entries(upcomingGames)
         .map(([game, _], index) => 

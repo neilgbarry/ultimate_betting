@@ -121,3 +121,11 @@ onAuthStateChanged(auth, user => {
     authuserId = null;
   }
 });
+
+const lastVisited = localStorage.getItem('lastVisited');
+if (lastVisited.includes("bets")) {
+    const leButton = document.getElementById("leaderboard-button");
+    leButton.innerText = "Back to Dashboard";
+    leButton.href = lastVisited;
+}
+localStorage.setItem('lastVisited', null)

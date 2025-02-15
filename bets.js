@@ -314,17 +314,18 @@ window.switchGame = function(game) {
   };
 
 window.userPage = function() {
+  localStorage.setItem('lastVisited', window.location.href);  // Save current URL
   window.location.href=`user.html?userId=${encodeURIComponent(userId)}`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const gameLockTimes = {
-    "COL vs. STANF": new Date("February 15, 2025 13:40:00"),
-    "OSU vs. CAL": new Date("February 15, 2025 13:40:00"),
-    "WWU vs. UCSC": new Date("February 15, 2025 15:00:00"),
-    "NEU vs. UCSD": new Date("February 15, 2025 15:00:00"),
-    "UTAH vs. UCD": new Date("February 15, 2025 16:20:00"),
-    "ORE vs. NEU": new Date("February 15, 2025 16:20:00"),
+    "game1": new Date("February 15, 2025 13:40:00"),
+    "game2": new Date("February 15, 2025 13:40:00"),
+    "game3": new Date("February 15, 2025 15:00:00"),
+    "game4": new Date("February 15, 2025 15:00:00"),
+    "game5": new Date("February 15, 2025 16:20:00"),
+    "game6": new Date("February 15, 2025 16:20:00"),
   };
 
   const now = new Date();
@@ -338,7 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const gameToggleDiv = document.querySelector(".game-toggle");
   gameToggleDiv.innerHTML = upcomingGames
     .map(([game, _], index) => 
-      `<button class="${index === 0 ? 'active' : ''}" onclick="switchGame('${game}')">${game.toUpperCase()}</button>`
+      `<button class="${index === 0 ? 'active' : ''}" onclick="switchGame('${game}')">${gameTitles[game]}</button>`
     )
     .join("");
 

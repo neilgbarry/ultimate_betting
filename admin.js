@@ -29,31 +29,46 @@ const app = initializeApp(firebaseConfig);
   ];
   
   // Render a card for each betting option
-  function renderOptionCards() {
+  async function renderOptionCards() {
+	const betsRef = collection(db, "bets");
+	const allBets = await getDocs(betsRef);
+
+	let categories = [];
+	allBets.forEach(doc => {
+		if ((doc.data().status === "pending") && 
+			(!categories.some(category => category.name === doc.data().game + " - " + doc.data().description))) {
+			// Push the bet to categories only if it doesn't exist
+			categories.push({name: doc.data().game + " - " +doc.data().description,
+				odds: doc.data().odds,
+				desc: doc.data().description
+			});
+		  }	})
+	console.log(categories);
+
 	const container = document.getElementById("optionsContainer");
 	container.innerHTML = "";
-	
-	betOptions.forEach(option => {
-	  const card = document.createElement("div");
-	  card.className = "option-card";
-	  card.innerHTML = `
-		<h3>${option.name}</h3>
-		<p>Odds: ${option.odds}</p>
-		<label>
-		  <input type="radio" name="settle_${option.id}" value="yes"> Yes
-		</label>
-		<label>
-		  <input type="radio" name="settle_${option.id}" value="no" checked> No
-		</label>
-		<br>
-		<button onclick="settleOption('${option.id}', ${option.odds})">Settle ${option.name}</button>
-	  `;
-	  container.appendChild(card);
-	});
+
+	categories.forEach(category => {
+		const card = document.createElement("div");
+		card.className = "option-card";
+		card.innerHTML = `
+		  <h3>${category.name}</h3>
+		  <p>Odds: ${category.odds}</p>
+		  <label>
+			<input type="radio" name="settle_${category.name}" value="yes"> Yes
+		  </label>
+		  <label>
+			<input type="radio" name="settle_${category.name}" value="no" checked> No
+		  </label>
+		  <br>
+		  <button onclick="settleOption('${category.name}')">Settle ${category.desc}</button>
+		`;
+		container.appendChild(card);
+	})
   }
   
   // Settle all pending bets for a given option
-  window.settleOption = async function(optionId, odds) {
+  window.settleOption = async function(optionId) {
 	const statusDiv = document.getElementById("status");
 	statusDiv.textContent = "Processing, please wait...";
   
@@ -69,7 +84,7 @@ const app = initializeApp(firebaseConfig);
 	
 	// Query all pending bets for this option
 	const betsRef = collection(db, "bets");
-	const q = query(betsRef, where("choice", "==", optionId), where("status", "==", "pending"));
+	const q = query(betsRef, where("gameDescription", "==", optionId), where("status", "==", "pending"));
 	const querySnapshot = await getDocs(q);
 	let processedCount = 0;
 	
@@ -83,7 +98,7 @@ const app = initializeApp(firebaseConfig);
 		const userSnap = await getDoc(userRef);
 		if (userSnap.exists()) {
 		  const currentBalance = userSnap.data().balance || 0;
-		  const payout = betData.amount * odds;
+		  const payout = betData.amount * betData.odds;
 		  await updateDoc(userRef, { balance: currentBalance + payout });
 		}
 		// Mark bet as won

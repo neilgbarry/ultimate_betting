@@ -279,6 +279,7 @@ async function placeBet(categoryName) {
     odds: parseFloat(selectedOption.dataset.odds),
     status: "pending",
     game: currentGame,
+    gameDescription: currentGame + " - " + selectedOption.dataset.description
   });
 
   alert(`Bet placed on "${selectedOption.nextSibling.textContent.trim()}" for $${betAmount}!`);
